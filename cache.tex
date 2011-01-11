@@ -1,0 +1,69 @@
+\section{Estimating the cache size}
+
+\subsection{A well-known technique}
+The Servet developers have used the same technique as Rafael Saavedra and Alan
+Smith\cite{Cache_TLB} to measure the cache size : reading from and writing to an
+array multiple times, increasing its size every time. Since traversing an array
+is faster if its values can fit in the cache, there should be a noticeable peak
+when the array becomes bigger than the cache.
+
+\subsection{A set of tests ?}
+The program was tested with the following machines :
+    \begin{itemize}
+        \item Intel Xeon E7450 (released in September 2008)
+        \item Intel Xeon 5060 (released in May 2006)
+        \item Itanium Montvale (released in OCtober 2007)
+        \item AMD Athlon unicore processor
+    \end{itemize}
+
+A large variety of hardware was used (AMD and Intel, multi-core and
+monocore...). Unfortunately, there were no recent processors : it would have
+been interesting to know whether the benchmarks could run well on new hardware,
+especially when it comes to HPC.
+%Dempsey 5060 => May 23rd, 2006
+%Xeon E7450 => September, 15th, 2008
+%AMD Athlon 3200 unicore
+%Itanium Montvale => October 2007
+
+\subsection{Not the expected results ?}
+The tests run by the Servet team  were all conclusive. However, the program was
+unable to correctly estimate the size of the L1 cache owned by a Nehalem E5504 :
+indeed, it was only able to detect 16KB out of 32KB of L1 cache.
+
+The algorithm is definitely not wrong : the only issue is the way the first
+peak is detected. Basically, the application computes gradients ($ C[k+1]/C[k],
+0 \le k < n $), and the first gradient greater than a predefined threshold
+indicates the cache size \footnote{See verb+est\_cache\_size.c+for more
+information on the behaviour of the code}
+
+\lstset{caption=A part of the output of $./job.sh est_cache$ on a Nehalem E5504}
+\begin{lstlisting}
+For size 16 KBytes -> gradient = 1.356991 
+For size 32 KBytes -> gradient = 2.239814 
+For size 64 KBytes -> gradient = 1.142565 
+\end{lstlisting}
+
+This output clearly shows that the cache size is 32KBytes. However, the
+threshold being set to 1.35, the program will return "16KBytes" as the L1 cache
+size.
+
+One way to fix this bug would probably consist in selecting highest gradient
+instead of the first gradient greater than a arbitrarily given value :
+
+\begin{quotation}
+Selecting the highest value in a typical L1 cache size range might be the best
+approach. Probable we have to refine this, as this could have some impact. We
+have seen around 99\% of successful L1 approximations, and any change should
+increase this overall rate! 
+\begin{flushright}Guillermo Lopez Taboada\end{flushright}
+\end{quotation}
+
+\subsection{Knowing the cache size may not be enough}
+Knowing the cache size, developers may write code which does not raise cache
+misses too often, thus increasing its performance. Another similar measurement
+may help decreasing the memory access cost : the size of the TLB. Saavedra and
+Smith\cite{Cache_TLB} proved that encountering TLB misses can significantly
+decrease performance. That is definitely a benchmark to add to Servet in order
+to be able to efficiently use a processor.
+
+
