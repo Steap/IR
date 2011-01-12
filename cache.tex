@@ -66,4 +66,18 @@ Smith\cite{Cache_TLB} proved that encountering TLB misses can significantly
 decrease performance. That is definitely a benchmark to add to Servet in order
 to be able to efficiently use a processor.
 
+\subsection{Shared Caches}
+In order to perfectly use the cache in a multicore machine, one has to know what
+cache are shared between the cores. Indeed, if two different cores need to
+access different data at the same time and use the same cache, they will keep
+replacing data in the cache, thus losing time. On the opposite, if they have to
+access the same piece of data at the same time, using a cache shared between
+them could improve performance.
 
+Therefore, the algorithm used by Servet is quite simple. Two cores try to
+access two arrays at the same time. If the number of cycles required to achieve
+this is significantly higher than expected (basically, greater than twice the
+time needed for a single core to access the elements of one of the arrays), then
+the cores probably do not share the cache. This algorithm is repeated for each
+level of cache, using arrays of size $\frac{2}{3} * cache size$ (which makes it
+impossible for the arrays to both fit in the cache).
