@@ -1,1 +1,25 @@
-\section{intro}
+\section{Introduction}
+Science often has to use empirical results; computer science makes no
+exception.
+
+Optimizing a given piece of code is both time-consuming and extremely hard. Not
+only do developers have to struggle with complicated algorithms, but they need
+to adapt their code to the machine it will be run on.
+
+Knowing the characteristics of the system may not be as easy as it seems.
+Indeed, the way to access these data depends on the hardware, on the operating
+system and might even require root privileges.
+
+Portability also matters. Pieces of software such as
+hwloc\footnote{\url{http://www.open-mpi.org/projects/hwloc/}} return excellent
+results, but are not guaranteed to be portable. Plus, in the field of HPC, a
+machine may become obsolete before programmers even have the time to optimize
+applications for it.
+
+All in all, writing a few different versions of the same program, run each and
+every one of them and pick up the fastest one might be the best approach.
+Running tests in order order to automatically detect relevant parameters and
+allow the code to adapt itself to the machine is also a way to improve
+performance.
+
+%%% Contents ?
