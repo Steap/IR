@@ -1,0 +1,17 @@
+\section{Memory Access Overhead}
+Knowing the cache topology may still not be enough to optimize memory accesses.
+Indeed, the previous tests do not take into account the fact that more than one
+core could be trying to access memory at the same time.
+
+The benchmark provided by Servet compares the bandwidth to memory when using
+only one core and the one when using a pair of cores trying to concurrently
+access memory. These bandwidth might be similar, in which case the memory
+access overhead is negligible.
+
+Knowing the pairs of cores which suffer from concurrent access to the memory,
+autotuned applications should be able to make sure that the cores within each
+pair avoid accessing the memory at the same time.
+
+Servet does even more : it is able to determine the pairs of cores which are the
+most affected by this overhead. This allows applications to know what memory
+accesses are the most important to optimize.
