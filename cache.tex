@@ -7,7 +7,14 @@ array multiple times, increasing its size every time. Since traversing an array
 is faster if its values can fit in the cache, there should be a noticeable peak
 when the array becomes bigger than the cache.
 
-\subsection{A set of tests ?}
+\subsection{Testing the benchmark}
+\subsubsection{Portability and reproducibility}
+Scientists often need to conduct experiments. One key point is that htey have to
+be reproducible. In computer science, one cannot know for sure if an experiment
+could work and give the expected results on every single machine it could
+possibly be run on. 
+
+\subsubsection{Tests run by the Server team}
 The program was tested with the following machines :
     \begin{itemize}
         \item Intel Xeon E7450 (released in September 2008)
@@ -19,21 +26,22 @@ The program was tested with the following machines :
 A large variety of hardware was used (AMD and Intel, multi-core and
 monocore...). Unfortunately, there were no recent processors : it would have
 been interesting to know whether the benchmarks could run well on new hardware,
-especially when it comes to HPC.
+especially when it comes to HPC. These tests  were all conclusive.
 %Dempsey 5060 => May 23rd, 2006
 %Xeon E7450 => September, 15th, 2008
 %AMD Athlon 3200 unicore
 %Itanium Montvale => October 2007
 
-\subsection{Not the expected results ?}
-The tests run by the Servet team  were all conclusive. However, the program was
-unable to correctly estimate the size of the L1 cache owned by a Nehalem E5504 :
-indeed, it was only able to detect 16KB out of 32KB of L1 cache.
+\subsubsection{Other tests}
+%XXX
+When we tried the program on a Nehalem E5504 though, it was unable to correctly
+estimate the size of the L1 cache : indeed, it was only able to detect 16KB out
+of 32KB of L1 cache.
 
 The algorithm is definitely not wrong : the only issue is the way the first
 peak is detected. Basically, the application computes gradients ($ C[k+1]/C[k],
 0 \le k < n $), and the first gradient greater than a predefined threshold
-indicates the cache size \footnote{See verb+est\_cache\_size.c+for more
+indicates the cache size \footnote{See est\_cache\_size.c for more
 information on the behaviour of the code}
 
 \lstset{caption=A part of the output of $./job.sh est_cache$ on a Nehalem E5504}
@@ -51,10 +59,10 @@ One way to fix this bug would probably consist in selecting highest gradient
 instead of the first gradient greater than a arbitrarily given value :
 
 \begin{quotation}
-Selecting the highest value in a typical L1 cache size range might be the best
+"Selecting the highest value in a typical L1 cache size range might be the best
 approach. Probable we have to refine this, as this could have some impact. We
 have seen around 99\% of successful L1 approximations, and any change should
-increase this overall rate! 
+increase this overall rate!"
 \begin{flushright}Guillermo Lopez Taboada\end{flushright}
 \end{quotation}
 

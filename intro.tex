@@ -22,4 +22,12 @@ Running tests in order order to automatically detect relevant parameters and
 allow the code to adapt itself to the machine is also a way to improve
 performance.
 
-%%% Contents ?
+% ATLAS Page 21
+This approach has been widely used and has proven successful in optimizing
+certain operations. For example, by empirically detecting the size of the L1
+cache, the pipeline depth and information about the floating point units, ATLAS
+is able to provide a DGEMM operation that can compete with the vendor-supplied
+implementation; in fact, it is the best implementation on some
+platforms\cite{ATLAS}.
+
+First, we'll be reviewing...
