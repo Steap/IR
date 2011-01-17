@@ -30,4 +30,7 @@ is able to provide a DGEMM operation that can compete with the vendor-supplied
 implementation; in fact, it is the best implementation on some
 platforms\cite{ATLAS}.
 
-First, we'll be reviewing...
+First, we will take a closer look at Servet's way of determining relevant
+information about the cache. Then we will see how it tries to gather data about
+the communication costs, which have an important impact on the performance but
+are still hard to determine.

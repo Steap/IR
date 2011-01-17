@@ -1,1 +1,40 @@
 \section{Communication costs}
+Sending messages between the nodes of a cluster can have a significant cost.
+Autotuned applications can therefore take advantage of determining these
+communication costs : basically, mapping processes which need to exchange data
+very often to processors for which the communication cost is low should improve
+the performance of the application\cite{MPIPP}.
+
+Servet presents a 3-step algorithm that should be able to provide relevant data
+about communication costs to applications.
+
+\subsection{Communication layers}
+First, Servet defines the concept of "communication layers". A communication
+layer is a set of pairs of cores for which the communication costs are similar.
+They start by sending a message between cores of each pair of cores in the
+cluster, then group similar pairs into a common layer, using as many layers as
+required.
+
+The size of this message is equal to the L1 cache size. Does that always make
+sense ? Sending messages larger than the L1 cache but still smaller than the
+L2/L3 cache might be interesting to group processors which share L2/L3 cache.
+Plus, sending messages larger than the L1 cache (which is usually very small)
+would be closer to what will really happen when running multi-core applications.
+Nothing is said about this in the article, and maybe the best idea is indeed to
+use the L1 cache size. Still, it would be interesting to test other sizes and
+compare the results.
+
+\subsection{Point-to-point communication}
+For each layer, the communication performance is estimated by sending messages
+(with different sizes) 
+% Citer 9
+
+\subsection{Scalability}
+In all these tests, only one message is sent at a time. In real application, it
+is very likely that many messages will be sent at once, which means that the
+current benchmark still has to make sure the system is highly scalable. It
+consists in comparing the latency of a single message and the latency when all
+the cores in a layer send one message.
+
+If it is much more expensive to send N messages rather than one, then it will be
+possible for autotuned applications to gather messages.
