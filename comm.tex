@@ -25,8 +25,18 @@ use the L1 cache size. Still, it would be interesting to test other sizes and
 compare the results.
 
 \subsection{Point-to-point communication}
-For each layer, the communication performance is estimated by sending messages
-(with different sizes) 
+For each layer, the communication performance is estimated by benchmarking a
+point-to-point communication (with different message sizes). Results are shown
+on figure \ref{P2P}.
+
+\begin{figure}[!ht]
+    \label{P2P}
+    \center
+    \includegraphics[width=8cm]{point_to_point}
+    \caption{Point to point communication. The results are exactly those that
+could be expected : intra-processor communication is faster than inter-processor
+communication. Sharing cache between processors makes it even faster.}
+\end{figure}
 % Citer 9
 
 \subsection{Scalability}
@@ -36,5 +46,5 @@ current benchmark still has to make sure the system is highly scalable. It
 consists in comparing the latency of a single message and the latency when all
 the cores in a layer send one message.
 
-If it is much more expensive to send N messages rather than one, then it will be
-possible for autotuned applications to gather messages.
+If it is much more expensive to send N messages rather than one, then autotuned
+applications will probably have to gather messages.

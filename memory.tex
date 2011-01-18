@@ -15,3 +15,13 @@ pair avoid accessing the memory at the same time.
 Servet does even more : it is able to determine the pairs of cores which are the
 most affected by this overhead. This allows applications to know what memory
 accesses are the most important to optimize.
+
+\begin{figure}
+    \center
+    \includegraphics[width=8cm]{memory_overhead.png}
+    \caption{Core pair of core 0. Finis Terrae : cores 0, 1, 2 and 3 share the
+same bus to memory, which is why the bandwidth is quite low when cores 1, 2, 3
+try to access memory at the same time as core 0. The bandwidth for cores 4, 5, 6
+and 7 is not so good, which can be explained by the fact that these cores are
+located in the same cell as core 0.} 
+\end{figure}
