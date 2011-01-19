@@ -3,9 +3,11 @@
 \subsection{A well-known technique}
 The Servet developers have used the same technique as Rafael Saavedra and Alan
 Smith\cite{Cache_TLB} to measure the cache size : reading from and writing to an
-array multiple times, increasing its size every time. Since traversing an array
-is faster if its values can fit in the cache, there should be a noticeable peak
-when the array becomes bigger than the cache.
+array $n$ times, increasing its size every time, and estimating $C(i), 1 \le i
+\le n$, the number of cycles it takes. Then it is possible to compute the
+gradients, $C[i+1]/C[i], 1 \le i < n$. Since traversing an array is faster if
+its values can fit in the cache, there should be a noticeable peak of the
+gradient   when the array becomes bigger than the cache.
 
 \subsection{Testing the benchmark}
 \subsubsection{Portability and reproducibility}
@@ -14,19 +16,22 @@ be reproducible. In computer science, one cannot know for sure if an experiment
 could work and give the expected results on every single machine it could
 possibly be run on. 
 
-\subsubsection{Tests run by the Server team}
+\subsubsection{Tests run by the Servet team}
 The program was tested with the following machines :
     \begin{itemize}
         \item Intel Xeon E7450 (released in September 2008)
         \item Intel Xeon 5060 (released in May 2006)
         \item Itanium Montvale (released in October 2007)
-        \item AMD Athlon unicore processor
+        \item AMD Athlon single core processor (released before 2005)
     \end{itemize}
 
 A large variety of hardware was used (AMD and Intel, multi-core and
 monocore...). Unfortunately, there were no recent processors : it would have
 been interesting to know whether the benchmarks could run well on new hardware,
-especially when it comes to HPC. These tests  were all conclusive.
+especially when it comes to HPC, since all processors used in this field are
+up-to-date\footnote{http://www.top500.org/stats/list/36/procgen}. Processors
+have been changing a lot lately : for example, the L3 cache is now almost always
+shared between all the cores.  These tests were all conclusive.
 %Dempsey 5060 => May 23rd, 2006
 %Xeon E7450 => September, 15th, 2008
 %AMD Athlon 3200 unicore
@@ -44,7 +49,7 @@ peak is detected. Basically, the application computes gradients ($ C[k+1]/C[k],
 indicates the cache size \footnote{See est\_cache\_size.c for more
 information on the behaviour of the code}
 
-\lstset{caption=A part of the output of $./job.sh est_cache$ on a Nehalem E5504}
+\lstset{caption=A part of the output of $./job.sh\ est\_cache$ on a Nehalem E5504}
 \begin{lstlisting}
 For size 16 KBytes -> gradient = 1.356991 
 For size 32 KBytes -> gradient = 2.239814 
@@ -55,8 +60,9 @@ This output clearly shows that the cache size is 32KBytes. However, the
 threshold being set to 1.35, the program will return "16KBytes" as the L1 cache
 size.
 
-One way to fix this bug would probably consist in selecting highest gradient
-instead of the first gradient greater than a arbitrarily given value :
+I contacted the Servet developers to tell them about this issue. According to
+them, one way to fix this bug would probably consist in selecting the highest
+gradient instead of the first gradient greater than a arbitrarily given value :
 
 \begin{quotation}
 "Selecting the highest value in a typical L1 cache size range might be the best
